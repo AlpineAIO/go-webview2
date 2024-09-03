@@ -513,6 +513,11 @@ func (e *Chromium) AddWebResourceRequestedFilterWithRequestSourceKinds(filter st
 	}
 }
 
+func (e *Chromium) GetFrameId() (uint64, error) {
+	corewebview2_20 := e.GetICoreWebView2_20()
+	return corewebview2_20.GetFrameId()
+}
+
 func (e *Chromium) Environment() *ICoreWebView2Environment {
 	return e.environment
 }
