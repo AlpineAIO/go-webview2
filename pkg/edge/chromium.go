@@ -518,7 +518,7 @@ func (e *Chromium) AddWebResourceRequestedFilterWithRequestSourceKinds(filter st
 	}
 }
 
-func (e *Chromium) GetFrameId() (uint64, error) {
+func (e *Chromium) GetFrameId() (uint32, error) {
 	corewebview2_20 := e.GetICoreWebView2_20()
 	return corewebview2_20.GetFrameId()
 }
