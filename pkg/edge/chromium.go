@@ -504,6 +504,13 @@ func (e *Chromium) AddWebResourceRequestedFilter(filter string, ctx COREWEBVIEW2
 	}
 }
 
+func (e *Chromium) AddWebResourceRequestedFilterWithRequestSourceKinds(uri string, resourceContext COREWEBVIEW2_WEB_RESOURCE_CONTEXT, requestSourceKinds COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS) {
+	err := e.webview.AddWebResourceRequestedFilterWithRequestSourceKinds(uri, resourceContext, requestSourceKinds)
+	if checkError(err) {
+		e.errorCallback(err)
+	}
+}
+
 func (e *Chromium) Environment() *ICoreWebView2Environment {
 	return e.environment
 }
