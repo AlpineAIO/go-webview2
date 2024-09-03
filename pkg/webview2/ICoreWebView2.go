@@ -3,71 +3,73 @@
 package webview2
 
 import (
-	"golang.org/x/sys/windows"
 	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
 
 type ICoreWebView2Vtbl struct {
 	IUnknownVtbl
-	GetSettings                            ComProc
-	GetSource                              ComProc
-	Navigate                               ComProc
-	NavigateToString                       ComProc
-	AddNavigationStarting                  ComProc
-	RemoveNavigationStarting               ComProc
-	AddContentLoading                      ComProc
-	RemoveContentLoading                   ComProc
-	AddSourceChanged                       ComProc
-	RemoveSourceChanged                    ComProc
-	AddHistoryChanged                      ComProc
-	RemoveHistoryChanged                   ComProc
-	AddNavigationCompleted                 ComProc
-	RemoveNavigationCompleted              ComProc
-	AddFrameNavigationStarting             ComProc
-	RemoveFrameNavigationStarting          ComProc
-	AddFrameNavigationCompleted            ComProc
-	RemoveFrameNavigationCompleted         ComProc
-	AddScriptDialogOpening                 ComProc
-	RemoveScriptDialogOpening              ComProc
-	AddPermissionRequested                 ComProc
-	RemovePermissionRequested              ComProc
-	AddProcessFailed                       ComProc
-	RemoveProcessFailed                    ComProc
-	AddScriptToExecuteOnDocumentCreated    ComProc
-	RemoveScriptToExecuteOnDocumentCreated ComProc
-	ExecuteScript                          ComProc
-	CapturePreview                         ComProc
-	Reload                                 ComProc
-	PostWebMessageAsJson                   ComProc
-	PostWebMessageAsString                 ComProc
-	AddWebMessageReceived                  ComProc
-	RemoveWebMessageReceived               ComProc
-	CallDevToolsProtocolMethod             ComProc
-	GetBrowserProcessId                    ComProc
-	GetCanGoBack                           ComProc
-	GetCanGoForward                        ComProc
-	GoBack                                 ComProc
-	GoForward                              ComProc
-	GetDevToolsProtocolEventReceiver       ComProc
-	Stop                                   ComProc
-	AddNewWindowRequested                  ComProc
-	RemoveNewWindowRequested               ComProc
-	AddDocumentTitleChanged                ComProc
-	RemoveDocumentTitleChanged             ComProc
-	GetDocumentTitle                       ComProc
-	AddHostObjectToScript                  ComProc
-	RemoveHostObjectFromScript             ComProc
-	OpenDevToolsWindow                     ComProc
-	AddContainsFullScreenElementChanged    ComProc
-	RemoveContainsFullScreenElementChanged ComProc
-	GetContainsFullScreenElement           ComProc
-	AddWebResourceRequested                ComProc
-	RemoveWebResourceRequested             ComProc
-	AddWebResourceRequestedFilter          ComProc
-	RemoveWebResourceRequestedFilter       ComProc
-	AddWindowCloseRequested                ComProc
-	RemoveWindowCloseRequested             ComProc
+	GetSettings                                         ComProc
+	GetSource                                           ComProc
+	Navigate                                            ComProc
+	NavigateToString                                    ComProc
+	AddNavigationStarting                               ComProc
+	RemoveNavigationStarting                            ComProc
+	AddContentLoading                                   ComProc
+	RemoveContentLoading                                ComProc
+	AddSourceChanged                                    ComProc
+	RemoveSourceChanged                                 ComProc
+	AddHistoryChanged                                   ComProc
+	RemoveHistoryChanged                                ComProc
+	AddNavigationCompleted                              ComProc
+	RemoveNavigationCompleted                           ComProc
+	AddFrameNavigationStarting                          ComProc
+	RemoveFrameNavigationStarting                       ComProc
+	AddFrameNavigationCompleted                         ComProc
+	RemoveFrameNavigationCompleted                      ComProc
+	AddScriptDialogOpening                              ComProc
+	RemoveScriptDialogOpening                           ComProc
+	AddPermissionRequested                              ComProc
+	RemovePermissionRequested                           ComProc
+	AddProcessFailed                                    ComProc
+	RemoveProcessFailed                                 ComProc
+	AddScriptToExecuteOnDocumentCreated                 ComProc
+	RemoveScriptToExecuteOnDocumentCreated              ComProc
+	ExecuteScript                                       ComProc
+	CapturePreview                                      ComProc
+	Reload                                              ComProc
+	PostWebMessageAsJson                                ComProc
+	PostWebMessageAsString                              ComProc
+	AddWebMessageReceived                               ComProc
+	RemoveWebMessageReceived                            ComProc
+	CallDevToolsProtocolMethod                          ComProc
+	GetBrowserProcessId                                 ComProc
+	GetCanGoBack                                        ComProc
+	GetCanGoForward                                     ComProc
+	GoBack                                              ComProc
+	GoForward                                           ComProc
+	GetDevToolsProtocolEventReceiver                    ComProc
+	Stop                                                ComProc
+	AddNewWindowRequested                               ComProc
+	RemoveNewWindowRequested                            ComProc
+	AddDocumentTitleChanged                             ComProc
+	RemoveDocumentTitleChanged                          ComProc
+	GetDocumentTitle                                    ComProc
+	AddHostObjectToScript                               ComProc
+	RemoveHostObjectFromScript                          ComProc
+	OpenDevToolsWindow                                  ComProc
+	AddContainsFullScreenElementChanged                 ComProc
+	RemoveContainsFullScreenElementChanged              ComProc
+	GetContainsFullScreenElement                        ComProc
+	AddWebResourceRequested                             ComProc
+	RemoveWebResourceRequested                          ComProc
+	AddWebResourceRequestedFilter                       ComProc
+	AddWebResourceRequestedFilterWithRequestSourceKinds ComProc
+	RemoveWebResourceRequestedFilter                    ComProc
+	AddWindowCloseRequested                             ComProc
+	RemoveWindowCloseRequested                          ComProc
 }
 
 type ICoreWebView2 struct {
@@ -885,6 +887,26 @@ func (i *ICoreWebView2) AddWebResourceRequestedFilter(uri string, resourceContex
 		uintptr(unsafe.Pointer(i)),
 		uintptr(unsafe.Pointer(_uri)),
 		uintptr(resourceContext),
+	)
+	if windows.Handle(hr) != windows.S_OK {
+		return syscall.Errno(hr)
+	}
+	return err
+}
+
+func (i *ICoreWebView2) AddWebResourceRequestedFilterWithRequestSourceKinds(uri string, resourceContext COREWEBVIEW2_WEB_RESOURCE_CONTEXT, requestSourceKinds COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS) error {
+
+	// Convert string 'uri' to *uint16
+	_uri, err := UTF16PtrFromString(uri)
+	if err != nil {
+		return err
+	}
+
+	hr, _, err := i.Vtbl.AddWebResourceRequestedFilterWithRequestSourceKinds.Call(
+		uintptr(unsafe.Pointer(i)),
+		uintptr(unsafe.Pointer(_uri)),
+		uintptr(resourceContext),
+		uintptr(requestSourceKinds),
 	)
 	if windows.Handle(hr) != windows.S_OK {
 		return syscall.Errno(hr)
