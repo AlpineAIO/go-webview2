@@ -9,19 +9,19 @@ import (
 )
 
 type iCoreWebView2_22Vtbl struct {
-	iCoreWebView2Vtbl
+	_IUnknownVtbl
 	AddWebResourceRequestedFilterWithRequestSourceKinds    ComProc
 	RemoveWebResourceRequestedFilterWithRequestSourceKinds ComProc
 }
 
 type ICoreWebView2_22 struct {
-	vtbl *iCoreWebView2_22Vtbl
+	Vtbl *iCoreWebView2_22Vtbl
 }
 
 func (i *ICoreWebView2_22) AddWebResourceRequestedFilterWithRequestSourceKinds(uri string, resourceContext COREWEBVIEW2_WEB_RESOURCE_CONTEXT, resourceKinds COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS) error {
 	_uri, _ := windows.UTF16PtrFromString(uri)
 
-	_, _, err := i.vtbl.AddWebResourceRequestedFilterWithRequestSourceKinds.Call(
+	_, _, err := i.Vtbl.AddWebResourceRequestedFilterWithRequestSourceKinds.Call(
 		uintptr(unsafe.Pointer(i)),
 		uintptr(unsafe.Pointer(_uri)),
 		uintptr(resourceContext),
@@ -37,7 +37,7 @@ func (i *ICoreWebView2_22) AddWebResourceRequestedFilterWithRequestSourceKinds(u
 func (i *ICoreWebView2_22) RemoveWebResourceRequestedFilterWithRequestSourceKinds(uri string, resourceContext COREWEBVIEW2_WEB_RESOURCE_CONTEXT, resourceKinds COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS) error {
 	_uri, _ := windows.UTF16PtrFromString(uri)
 
-	_, _, err := i.vtbl.RemoveWebResourceRequestedFilterWithRequestSourceKinds.Call(
+	_, _, err := i.Vtbl.RemoveWebResourceRequestedFilterWithRequestSourceKinds.Call(
 		uintptr(unsafe.Pointer(i)),
 		uintptr(unsafe.Pointer(_uri)),
 		uintptr(resourceContext),
@@ -48,6 +48,11 @@ func (i *ICoreWebView2_22) RemoveWebResourceRequestedFilterWithRequestSourceKind
 	}
 
 	return nil
+}
+
+func (i *ICoreWebView2_22) AddRef() uintptr {
+	refCounter, _, _ := i.Vtbl.AddRef.Call(uintptr(unsafe.Pointer(i)))
+	return refCounter
 }
 
 func (i *ICoreWebView2) GetICoreWebView2_22() *ICoreWebView2_22 {
