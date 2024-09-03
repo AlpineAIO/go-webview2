@@ -16,8 +16,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/wailsapp/go-webview2/internal/w32"
-	"github.com/wailsapp/go-webview2/webviewloader"
+	"github.com/AlpineAIO/go-webview2/internal/w32"
+	"github.com/AlpineAIO/go-webview2/webviewloader"
 	"golang.org/x/sys/windows"
 )
 
