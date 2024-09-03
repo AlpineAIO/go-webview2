@@ -227,16 +227,16 @@ func (e *Chromium) SetPadding(padding Rect) {
 }
 
 func (e *Chromium) ResizeWithBounds(bounds *Rect) {
-    if e.hwnd == 0 {
-        return
-    }
+	if e.hwnd == 0 {
+		return
+	}
 
-    bounds.Top += e.padding.Top
-    bounds.Bottom -= e.padding.Bottom
-    bounds.Left += e.padding.Left
-    bounds.Right -= e.padding.Right
+	bounds.Top += e.padding.Top
+	bounds.Bottom -= e.padding.Bottom
+	bounds.Left += e.padding.Left
+	bounds.Right -= e.padding.Right
 
-    e.SetSize(*bounds)
+	e.SetSize(*bounds)
 }
 
 func (e *Chromium) Resize() {
@@ -411,7 +411,7 @@ func (e *Chromium) MessageReceived(sender *ICoreWebView2, args *ICoreWebView2Web
 
 	if HasCapability(e.webview2RuntimeVersion, GetAdditionalObjects) {
 		obj, err := args.GetAdditionalObjects()
-		if err != nil {
+		if checkError(err) {
 			e.errorCallback(err)
 		}
 
@@ -453,7 +453,7 @@ func (e *Chromium) SetBackgroundColour(R, G, B, A uint8) {
 	}
 
 	err := controller2.PutDefaultBackgroundColor(backgroundCol)
-	if err != nil {
+	if checkError(err) {
 		e.errorCallback(err)
 	}
 }
@@ -486,7 +486,7 @@ func (e *Chromium) PermissionRequested(_ *ICoreWebView2, args *iCoreWebView2Perm
 
 func (e *Chromium) WebResourceRequested(sender *ICoreWebView2, args *ICoreWebView2WebResourceRequestedEventArgs) uintptr {
 	req, err := args.GetRequest()
-	if err != nil {
+	if checkError(err) {
 		log.Fatal(err)
 	}
 	defer req.Release()
@@ -499,7 +499,7 @@ func (e *Chromium) WebResourceRequested(sender *ICoreWebView2, args *ICoreWebVie
 
 func (e *Chromium) AddWebResourceRequestedFilter(filter string, ctx COREWEBVIEW2_WEB_RESOURCE_CONTEXT) {
 	err := e.webview.AddWebResourceRequestedFilter(filter, ctx)
-	if err != nil {
+	if checkError(err) {
 		e.errorCallback(err)
 	}
 }
@@ -576,14 +576,14 @@ func (e *Chromium) NotifyParentWindowPositionChanged() error {
 
 func (e *Chromium) Focus() {
 	err := e.controller.MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC)
-	if err != nil {
+	if checkError(err) {
 		e.errorCallback(err)
 	}
 }
 
 func (e *Chromium) PutZoomFactor(zoomFactor float64) {
 	err := e.controller.PutZoomFactor(zoomFactor)
-	if err != nil {
+	if checkError(err) {
 		e.errorCallback(err)
 	}
 }
@@ -718,4 +718,11 @@ func (e *Chromium) GetCookieManager() (*ICoreWebView2CookieManager, error) {
 
 	// Note: The caller is responsible for calling Release() on the returned cookieManager
 	return cookieManager, nil
+}
+
+func checkError(err error) bool {
+	if err != nil && !strings.Contains(err.Error(), "quota") {
+		return true
+	}
+	return false
 }
