@@ -41,7 +41,7 @@ func (i *ICoreWebView2_22) RemoveWebResourceRequestedFilterWithRequestSourceKind
 		uintptr(unsafe.Pointer(i)),
 		uintptr(unsafe.Pointer(_uri)),
 		uintptr(resourceContext),
-		uintptr(unsafe.Pointer(&resourceKinds)),
+		uintptr(resourceKinds),
 	)
 	if err != windows.ERROR_SUCCESS {
 		return err
