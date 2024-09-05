@@ -149,7 +149,6 @@ func (e *Chromium) ShuttingDown() {
 
 func (e *Chromium) errorCallback(err error) {
 	e.globalErrorCallback(err)
-	os.Exit(1)
 }
 
 func (e *Chromium) SetErrorCallback(callback func(error)) {
