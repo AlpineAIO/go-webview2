@@ -260,10 +260,12 @@ func (e *Chromium) Eval(script string) {
 }
 
 func (e *Chromium) Show() error {
+	fmt.Println("Chromium Show")
 	return e.controller.PutIsVisible(true)
 }
 
 func (e *Chromium) Hide() error {
+	fmt.Println("Chromium Hide")
 	return e.controller.PutIsVisible(false)
 }
 
@@ -555,6 +557,7 @@ func (e *Chromium) AcceleratorKeyPressed(sender *ICoreWebView2Controller, args *
 }
 
 func (e *Chromium) GetSettings() (*ICoreWebViewSettings, error) {
+	fmt.Println("GetSettings")
 	return e.webview.GetSettings()
 }
 
@@ -670,6 +673,8 @@ func (e *Chromium) PutIsPasswordAutosaveEnabled(value bool) error {
 }
 
 func (e *Chromium) PutIsSwipeNavigationEnabled(enabled bool) error {
+	fmt.Println("PutIsSwipeNavigationEnabled")
+
 	if !hasCapability(e.webview2RuntimeVersion, SwipeNavigation) {
 		return UnsupportedCapabilityError
 	}
@@ -686,6 +691,8 @@ func (e *Chromium) PutIsSwipeNavigationEnabled(enabled bool) error {
 }
 
 func (e *Chromium) AllowExternalDrag(allow bool) error {
+	fmt.Println("AllowExternalDrag")
+
 	if !hasCapability(e.webview2RuntimeVersion, AllowExternalDrop) {
 		return UnsupportedCapabilityError
 	}

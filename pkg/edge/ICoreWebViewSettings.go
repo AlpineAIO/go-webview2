@@ -3,6 +3,7 @@
 package edge
 
 import (
+	"fmt"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -144,6 +145,8 @@ func (i *ICoreWebViewSettings) GetIsStatusBarEnabled() (bool, error) {
 }
 
 func (i *ICoreWebViewSettings) PutIsStatusBarEnabled(isStatusBarEnabled bool) error {
+	fmt.Println("PutIsStatusBarEnabled")
+
 	var err error
 
 	_, _, err = i.vtbl.PutIsStatusBarEnabled.Call(
@@ -170,6 +173,8 @@ func (i *ICoreWebViewSettings) GetAreDevToolsEnabled() (bool, error) {
 }
 
 func (i *ICoreWebViewSettings) PutAreDevToolsEnabled(areDevToolsEnabled bool) error {
+	fmt.Println("PutAreDevToolsEnabled")
+
 	var err error
 	_, _, err = i.vtbl.PutAreDevToolsEnabled.Call(
 		uintptr(unsafe.Pointer(i)),
@@ -195,6 +200,8 @@ func (i *ICoreWebViewSettings) GetAreDefaultContextMenusEnabled() (bool, error) 
 }
 
 func (i *ICoreWebViewSettings) PutAreDefaultContextMenusEnabled(enabled bool) error {
+	fmt.Println("PutAreDefaultContextMenusEnabled")
+
 	var err error
 	_, _, err = i.vtbl.PutAreDefaultContextMenusEnabled.Call(
 		uintptr(unsafe.Pointer(i)),
@@ -246,6 +253,8 @@ func (i *ICoreWebViewSettings) GetIsZoomControlEnabled() (bool, error) {
 }
 
 func (i *ICoreWebViewSettings) PutIsZoomControlEnabled(enabled bool) error {
+	fmt.Println("PutIsZoomControlEnabled")
+
 	var err error
 
 	_, _, err = i.vtbl.PutIsZoomControlEnabled.Call(
@@ -332,6 +341,8 @@ func (i *ICoreWebViewSettings) GetAreBrowserAcceleratorKeysEnabled() (bool, erro
 }
 
 func (i *ICoreWebViewSettings) PutAreBrowserAcceleratorKeysEnabled(enabled bool) error {
+	fmt.Println("PutAreBrowserAcceleratorKeysEnabled")
+
 	var err error
 
 	_, _, err = i.vtbl.PutAreBrowserAcceleratorKeysEnabled.Call(
@@ -384,6 +395,8 @@ func (i *ICoreWebViewSettings) GetIsSwipeNavigationEnabled() (bool, error) {
 }
 
 func (i *ICoreWebViewSettings) PutIsSwipeNavigationEnabled(enabled bool) error {
+	fmt.Println("PutIsSwipeNavigationEnabled")
+
 	var err error
 
 	_, _, err = i.vtbl.PutIsSwipeNavigationEnabled.Call(

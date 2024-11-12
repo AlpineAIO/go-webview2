@@ -3,6 +3,7 @@
 package edge
 
 import (
+	"fmt"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -156,6 +157,8 @@ func (i *ICoreWebView2Settings) GetAreDevToolsEnabled() (bool, error) {
 }
 
 func (i *ICoreWebView2Settings) PutAreDevToolsEnabled(areDevToolsEnabled bool) error {
+	fmt.Println("PutAreDevToolsEnabled")
+
 	var err error
 	_, _, err = i.vtbl.PutAreDevToolsEnabled.Call(
 		uintptr(unsafe.Pointer(i)),
