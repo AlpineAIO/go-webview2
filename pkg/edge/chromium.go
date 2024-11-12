@@ -285,10 +285,12 @@ func (e *Chromium) Eval(script string) {
 }
 
 func (e *Chromium) Show() error {
+	fmt.Println("Chromium Show")
 	return e.controller.PutIsVisible(true)
 }
 
 func (e *Chromium) Hide() error {
+	fmt.Println("Chromium Hide")
 	return e.controller.PutIsVisible(false)
 }
 
@@ -550,6 +552,7 @@ func (e *Chromium) AcceleratorKeyPressed(sender *ICoreWebView2Controller, args *
 }
 
 func (e *Chromium) GetSettings() (*ICoreWebViewSettings, error) {
+	fmt.Println("GetSettings")
 	return e.webview.GetSettings()
 }
 
