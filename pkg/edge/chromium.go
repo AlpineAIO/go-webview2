@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync/atomic"
 	"syscall"
@@ -22,7 +23,26 @@ import (
 type Rect = w32.Rect
 
 func globalErrorHandler(err error) {
+	if err == nil {
+		return
+	}
+
 	println("Error detected in Webview2:\n", err.Error())
+
+	stackBuf := make([]uintptr, 64)
+	stackSize := runtime.Callers(2, stackBuf)
+	frames := runtime.CallersFrames(stackBuf[:stackSize])
+
+	fmt.Println("\nStack:")
+	stackIndex := 1
+	for {
+		frame, more := frames.Next()
+		if !more {
+			break
+		}
+		fmt.Printf("%d. %s\n\t%s:%d\n", stackIndex, frame.Function, frame.File, frame.Line)
+		stackIndex++
+	}
 }
 
 type Chromium struct {
@@ -723,4 +743,31 @@ func checkError(err error) bool {
 		return true
 	}
 	return false
+}
+
+func (e *Chromium) GetCookieManager() (*ICoreWebView2CookieManager, error) {
+	if e.webview == nil {
+		return nil, errors.New("webview not initialized")
+	}
+
+	// Check WebView2 version
+	if e.webview2RuntimeVersion == "" {
+		return nil, errors.New("WebView2 runtime version not available")
+	}
+
+	// Get ICoreWebView2_2 interface
+	webview2, err := e.webview.QueryInterface2()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get ICoreWebView2_2: %w\nThis functionality requires WebView2 Runtime version 89.0.721.0 or later. Current version: %s", err, e.webview2RuntimeVersion)
+	}
+	defer webview2.Release()
+
+	// Get cookie manager
+	cookieManager, err := webview2.GetCookieManager()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get cookie manager: %w", err)
+	}
+
+	// Note: The caller is responsible for calling Release() on the returned cookieManager
+	return cookieManager, nil
 }
