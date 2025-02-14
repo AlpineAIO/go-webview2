@@ -5,9 +5,9 @@ import (
 	"time"
 	"unsafe"
 
+	"github.com/AlpineAIO/go-webview2/internal/w32"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/wailsapp/go-webview2/internal/w32"
 	"golang.org/x/sys/windows"
 )
 

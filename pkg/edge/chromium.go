@@ -506,9 +506,7 @@ func (e *Chromium) AddWebResourceRequestedFilter(filter string, ctx COREWEBVIEW2
 }
 
 func (e *Chromium) AddWebResourceRequestedFilterWithRequestSourceKinds(filter string, ctx COREWEBVIEW2_WEB_RESOURCE_CONTEXT, kinds COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS) {
-	corewebview2_22 := e.GetICoreWebView2_22()
-
-	err := corewebview2_22.AddWebResourceRequestedFilterWithRequestSourceKinds(filter, ctx, kinds)
+	err := e.webview.AddWebResourceRequestedFilterWithRequestSourceKinds(filter, ctx, kinds)
 	if checkError(err) {
 		e.errorCallback(err)
 	}

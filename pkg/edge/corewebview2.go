@@ -637,6 +637,25 @@ func (i *ICoreWebView2) AddWebResourceRequestedFilter(uri string, resourceContex
 	return nil
 }
 
+func (i *ICoreWebView2) AddWebResourceRequestedFilterWithRequestSourceKinds(uri string, resourceContext COREWEBVIEW2_WEB_RESOURCE_CONTEXT, requestSourceKinds COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS) error {
+
+	// Convert string 'uri' to *uint16
+	_uri, err := windows.UTF16PtrFromString(uri)
+	if err != nil {
+		return err
+	}
+	hr, _, _ := i.vtbl.AddWebResourceRequestedFilter.Call(
+		uintptr(unsafe.Pointer(i)),
+		uintptr(unsafe.Pointer(_uri)),
+		uintptr(resourceContext),
+		uintptr(requestSourceKinds),
+	)
+	if windows.Handle(hr) != windows.S_OK {
+		return windows.Errno(hr)
+	}
+	return nil
+}
+
 func (i *ICoreWebView2) OpenDevToolsWindow() error {
 
 	hr, _, _ := i.vtbl.OpenDevToolsWindow.Call(
